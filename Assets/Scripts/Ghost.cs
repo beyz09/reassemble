@@ -23,6 +23,26 @@ public class Ghost : Interactable
             return;
         }
 
+        // If a CustomDialogueController is present, use it so the designer can wire custom UI elements.
+        if (CustomDialogueController.Instance != null)
+        {
+            CustomDialogueController.Instance.ShowDialogue(dialogueLines, dialogueChoices, (choice) =>
+            {
+                Debug.Log("Player chose option: " + choice);
+                if (choice == correctChoiceIndex)
+                {
+                    LevelManager.Instance.ClearGhost(ghostId);
+                    Dismiss();
+                }
+                else
+                {
+                    Debug.Log("Wrong choice. The ghost remains.");
+                }
+            });
+            return;
+        }
+
+        // Fallback to the global DialogueSystem (may route to DialogueUI if present)
         DialogueSystem.Instance.StartDialogue(dialogueLines, dialogueChoices, (choice) =>
         {
             Debug.Log("Player chose option: " + choice);

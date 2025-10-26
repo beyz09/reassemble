@@ -1,10 +1,8 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-// Optional TextMeshPro support
-#if TMP_PRESENT
 using TMPro;
-#endif
 
 /// <summary>
 /// Dialogue UI with improved responsiveness.
@@ -24,12 +22,7 @@ public class DialogueUI : MonoBehaviour
     public GameObject panel;
 
     [Tooltip("If using TextMeshPro, assign this. Otherwise assign `lineText` below.")]
-#if TMP_PRESENT
     public TMP_Text tmpLineText;
-#else
-    // placeholder field kept for compiler when TMP isn't present
-    // (leave null, we'll use legacy Text if assigned)
-#endif
     public Text lineText;
     public RectTransform choicesContainer;
     public Button choiceButtonPrefab; // optional
@@ -68,56 +61,70 @@ public class DialogueUI : MonoBehaviour
     public void ShowDialogue(string[] lines, string[] choices, Action<int> onChoice)
     {
         // Validate references
-        if (panel == null || choicesContainer == null || (lineText == null
-#if TMP_PRESENT
-            && tmpLineText == null
-#endif
-            ))
+        if (panel == null || choicesContainer == null || (lineText == null && tmpLineText == null))
         {
             Debug.LogWarning("DialogueUI: panel/lineText/choicesContainer not set. Cannot show dialogue.");
             onChoice?.Invoke(choices != null && choices.Length > 0 ? 0 : -1);
             return;
         }
 
+        // Start a coroutine to show lines one-by-one, then show choices.
+        if (activeRoutine != null) StopCoroutine(activeRoutine);
+        activeRoutine = StartCoroutine(ShowDialogueCoroutine(lines ?? new string[0], choices, onChoice));
+    }
+
+    Coroutine activeRoutine = null;
+
+    IEnumerator ShowDialogueCoroutine(string[] lines, string[] choices, Action<int> onChoice)
+    {
         panel.SetActive(true);
 
-        // Set the line text using TMP if available/assigned, otherwise legacy Text
-#if TMP_PRESENT
-        if (tmpLineText != null)
+        // Clear any existing choice buttons
+        for (int i = choicesContainer.childCount - 1; i >= 0; i--)
+            Destroy(choicesContainer.GetChild(i).gameObject);
+
+        // Show lines one at a time; advance with a Next button
+        for (int li = 0; li < lines.Length; li++)
         {
-            tmpLineText.text = string.Join("\n", lines ?? new string[0]);
-            // Optionally enable auto-size for TMP
-            tmpLineText.enableAutoSizing = true;
-            tmpLineText.fontSizeMin = 18;
-            tmpLineText.fontSizeMax = 40;
-        }
-        else
-#endif
-        if (lineText != null)
-        {
-            lineText.text = string.Join("\n", lines ?? new string[0]);
-            // Enable best fit so text scales when the panel size changes
-            lineText.resizeTextForBestFit = true;
-            lineText.resizeTextMinSize = 14;
-            lineText.resizeTextMaxSize = 36;
+            SetLineText(lines[li]);
+
+            // Clear any existing choice buttons
+            for (int i = choicesContainer.childCount - 1; i >= 0; i--)
+                Destroy(choicesContainer.GetChild(i).gameObject);
+
+            bool advanced = false;
+            // Create a Next button to advance (unless it's the last line and there are choices)
+            bool createNext = !(li == lines.Length - 1 && choices != null && choices.Length > 0);
+            if (createNext)
+            {
+                CreateChoiceButton("Next", () => { advanced = true; });
+            }
+
+            // Wait until advanced by button
+            while (!advanced)
+            {
+                yield return null;
+            }
         }
 
-        // Clear existing choices
+        // After all lines shown, present choices (or an OK)
         for (int i = choicesContainer.childCount - 1; i >= 0; i--)
             Destroy(choicesContainer.GetChild(i).gameObject);
 
         if (choices == null || choices.Length == 0)
         {
-            // No choices: provide an OK button
             CreateChoiceButton("OK", () => { Hide(); onChoice?.Invoke(-1); });
-            return;
+        }
+        else
+        {
+            for (int i = 0; i < choices.Length; i++)
+            {
+                int idx = i;
+                CreateChoiceButton(choices[i], () => { Hide(); onChoice?.Invoke(idx); });
+            }
         }
 
-        for (int i = 0; i < choices.Length; i++)
-        {
-            int idx = i;
-            CreateChoiceButton(choices[i], () => { Hide(); onChoice?.Invoke(idx); });
-        }
+        activeRoutine = null;
     }
 
     void CreateChoiceButton(string label, Action onClick)
@@ -159,15 +166,13 @@ public class DialogueUI : MonoBehaviour
             rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one; rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
         }
 
-        // If prefab has a Text child, set its label. Also try TMP if present.
+        // If prefab has a Text or TMP child, set its label.
         if (choiceButtonPrefab != null)
         {
             var t = btn.GetComponentInChildren<Text>();
             if (t != null) t.text = label;
-#if TMP_PRESENT
             var tt = btn.GetComponentInChildren<TMP_Text>();
             if (tt != null) tt.text = label;
-#endif
         }
 
         btn.onClick.RemoveAllListeners();
@@ -177,5 +182,72 @@ public class DialogueUI : MonoBehaviour
     public void Hide()
     {
         if (panel != null) panel.SetActive(false);
+        if (activeRoutine != null)
+        {
+            StopCoroutine(activeRoutine);
+            activeRoutine = null;
+        }
+
+        // clear choice buttons when hiding
+        if (choicesContainer != null)
+        {
+            for (int i = choicesContainer.childCount - 1; i >= 0; i--)
+                Destroy(choicesContainer.GetChild(i).gameObject);
+        }
+    }
+
+    /// <summary>
+    /// Show a short hint message in the same line area for `duration` seconds.
+    /// Useful for item-blocked messages like "You need to deal with the ghost first.".
+    /// </summary>
+    public void ShowHint(string message, float duration = 2f)
+    {
+        if (panel == null || choicesContainer == null || (tmpLineText == null && lineText == null))
+        {
+            Debug.Log(message);
+            return;
+        }
+
+        if (activeRoutine != null) StopCoroutine(activeRoutine);
+        activeRoutine = StartCoroutine(ShowHintCoroutine(message, duration));
+    }
+
+    IEnumerator ShowHintCoroutine(string message, float duration)
+    {
+        panel.SetActive(true);
+        SetLineText(message);
+
+        // clear any choices
+        for (int i = choicesContainer.childCount - 1; i >= 0; i--)
+            Destroy(choicesContainer.GetChild(i).gameObject);
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        Hide();
+    }
+
+    void SetLineText(string s)
+    {
+        if (tmpLineText != null)
+        {
+            tmpLineText.text = s;
+            tmpLineText.enableAutoSizing = true;
+            tmpLineText.fontSizeMin = 18;
+            tmpLineText.fontSizeMax = 40;
+            return;
+        }
+
+        if (lineText != null)
+        {
+            lineText.text = s;
+            lineText.resizeTextForBestFit = true;
+            lineText.resizeTextMinSize = 14;
+            lineText.resizeTextMaxSize = 36;
+        }
     }
 }
