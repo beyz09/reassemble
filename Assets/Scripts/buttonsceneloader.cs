@@ -3,22 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
-public class SimpleSceneLoader : MonoBehaviour
+public class ButtonSceneLoader : MonoBehaviour
 {
-    // Unity'nin her döngüde kontrol ettiği metot
-    void Update()
-    {
-        // Ekrana tıklandığında (sol fare tuşu) VEYA herhangi bir tuşa basıldığında
-        if (Input.GetMouseButtonDown(0) || Input.anyKeyDown)
-        {
-            // Bir sonraki sahneyi yükleme fonksiyonunu çağır
-            LoadNextScene();
-        }
-    }
-
-    // Bir sonraki sahneyi yükleyen fonksiyon
-    void LoadNextScene()
+    // Bu fonksiyon, bir UI Butonuna tıklandığında çağrılacaktır.
+    public void LoadNextScene()
     {
         // 1. Şu anki sahnenin Build Index numarasını al
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -27,11 +15,9 @@ public class SimpleSceneLoader : MonoBehaviour
         int nextSceneIndex = currentSceneIndex + 1;
 
         // 3. Sahne sayısını kontrol et (Oyunun bitip bitmediğini görmek için)
-        // Build Settings'teki toplam sahne sayısını al
         int totalSceneCount = SceneManager.sceneCountInBuildSettings;
 
-        // Eğer bir sonraki index toplam sahne sayısına eşitse (son sahneden sonraki index),
-        // oyun bitmiştir veya menüye dönülmelidir.
+        // Eğer bir sonraki index toplam sahne sayısından küçükse
         if (nextSceneIndex < totalSceneCount)
         {
             // Geçiş yapılacak sahne varsa, yükle
@@ -39,7 +25,7 @@ public class SimpleSceneLoader : MonoBehaviour
         }
         else
         {
-            // OPSİYONEL: Son sahneden sonra ilk sahneye (Ana Menü, Index 0) dön
+            // Son sahneden sonra Ana Menü'ye (Index 0) dön
             SceneManager.LoadScene(0);
         }
     }
