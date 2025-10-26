@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 /// <summary>
 /// Manager for the rinse and dry two-step process with a single-slip tolerance.
@@ -18,6 +19,9 @@ public class RinseAndDryAction : MonoBehaviour
 
     public Action OnSuccess;
     public Action<string> OnFail; // reason
+
+    [Tooltip("Inspector-friendly success event")] public UnityEvent OnSuccessEvent = new UnityEvent();
+    [Tooltip("Inspector-friendly fail event")] public UnityEvent OnFailEvent = new UnityEvent();
 
     void Awake()
     {
@@ -59,6 +63,7 @@ public class RinseAndDryAction : MonoBehaviour
         if (slipsRemaining < 0)
         {
             OnFail?.Invoke(reason);
+            OnFailEvent?.Invoke();
         }
         else
         {
@@ -66,11 +71,23 @@ public class RinseAndDryAction : MonoBehaviour
         }
     }
 
+    // Convenience methods for inspector-wired events
+    public void RegisterTowelSlip()
+    {
+        RegisterSlip("towel_fail");
+    }
+
+    public void RegisterWaterSlip()
+    {
+        RegisterSlip("water_fail");
+    }
+
     void CheckComplete()
     {
         if (rinsed && dried)
         {
             OnSuccess?.Invoke();
+            OnSuccessEvent?.Invoke();
         }
     }
 }

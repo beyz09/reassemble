@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 /// <summary>
 /// FoamAction: requires a continuous drag/hold action for a duration (e.g. 10s). Any aggressive motion or release before time causes fail.
@@ -18,13 +19,29 @@ public class FoamAction : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     Coroutine foamCoroutine;
     Vector2 lastPos;
     float lastTime;
+    bool isRunning = false;
+    bool completed = false;
+
+    [Serializable]
+    public class FloatEvent : UnityEvent<float> { }
+
+    [Tooltip("Progress event (0..1) invoked while foaming)")]
+    public FloatEvent OnProgress = new FloatEvent();
+
+    [Tooltip("Invoked when foam action starts")] public UnityEvent OnStarted = new UnityEvent();
+    [Tooltip("Invoked when foam action stops (either success or fail)")] public UnityEvent OnStopped = new UnityEvent();
+    [Tooltip("Invoked when foam completes successfully")] public UnityEvent OnSuccessEvent = new UnityEvent();
+    [Tooltip("Invoked when foam fails")] public UnityEvent OnFailEvent = new UnityEvent();
 
     public void OnPointerDown(PointerEventData eventData)
     {
         lastPos = eventData.position;
         lastTime = Time.unscaledTime;
         if (foamCoroutine != null) StopCoroutine(foamCoroutine);
+        completed = false;
+        isRunning = true;
         foamCoroutine = StartCoroutine(FoamTimer());
+        OnStarted?.Invoke();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -45,12 +62,23 @@ public class FoamAction : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (foamCoroutine != null)
+        // If foam is still running (not yet completed), releasing is a fail.
+        if (isRunning && !completed)
         {
-            StopCoroutine(foamCoroutine);
-            foamCoroutine = null;
+            if (foamCoroutine != null)
+            {
+                StopCoroutine(foamCoroutine);
+                foamCoroutine = null;
+            }
+            isRunning = false;
+            OnFail?.Invoke(); // releasing early fails
+            OnFailEvent?.Invoke();
+            OnStopped?.Invoke();
         }
-        OnFail?.Invoke(); // releasing early fails
+        else
+        {
+            // either already completed (success invoked) or not running; do nothing
+        }
     }
 
     IEnumerator FoamTimer()
@@ -59,11 +87,17 @@ public class FoamAction : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         while (t < requiredTime)
         {
             t += Time.unscaledDeltaTime;
-            // UI update hook could be added here via event
+            // update progress (0..1)
+            float progress = Mathf.Clamp01(t / requiredTime);
+            OnProgress?.Invoke(progress);
             yield return null;
         }
         foamCoroutine = null;
+        completed = true;
+        isRunning = false;
         OnSuccess?.Invoke();
+        OnSuccessEvent?.Invoke();
+        OnStopped?.Invoke();
     }
 
     void StopFoamFail()
@@ -71,11 +105,15 @@ public class FoamAction : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         if (foamCoroutine != null) StopCoroutine(foamCoroutine);
         foamCoroutine = null;
         OnFail?.Invoke();
+        OnFailEvent?.Invoke();
+        OnStopped?.Invoke();
     }
 
     public void ResetState()
     {
         if (foamCoroutine != null) StopCoroutine(foamCoroutine);
         foamCoroutine = null;
+        isRunning = false;
+        completed = false;
     }
 }
