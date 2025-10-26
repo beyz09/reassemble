@@ -27,6 +27,8 @@ public class PlayerInteraction : MonoBehaviour
                     float d = Vector2.Distance(origin, col.transform.position);
                     if (!requireProximity || d <= maxDistance)
                     {
+                        // report that the player interacted (used for intro hints)
+                        InteractionTracker.ReportInteraction();
                         interact.Interact();
                     }
                     else

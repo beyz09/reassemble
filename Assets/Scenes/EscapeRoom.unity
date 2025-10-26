@@ -233,7 +233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &287267939
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -295,8 +295,8 @@ Transform:
   m_GameObject: {fileID: 287267937}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.69, y: 1.33, z: 0}
-  m_LocalScale: {x: 0.81096697, y: 0.81096697, z: 0.81096697}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -316,10 +316,11 @@ MonoBehaviour:
   displayName: Interactable
   ghostId: 2
   dialogueLines:
-  - "\xD6rnek diyalog"
+  - "Arkada\u015F\u0131n\u0131n mektubunda sana ihtiyac\u0131 var. Ne yapmal\u0131s\u0131n?"
   dialogueChoices:
-  - "do\u011Fru se\xE7im"
-  - "yanl\u0131\u015F se\xE7im"
+  - "\u015Eimdi planlar\u0131n\u0131 ertele ve hemen onu ara. Yard\u0131ma ihtiyac\u0131
+    var."
+  - "Bo\u015Fver, kendi planlar\u0131n daha \xF6nemli. Yar\u0131n arars\u0131n."
   correctChoiceIndex: 0
 --- !u!61 &287267942
 BoxCollider2D:
@@ -459,6 +460,92 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &560704748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 560704749}
+  - component: {fileID: 560704750}
+  - component: {fileID: 560704751}
+  m_Layer: 5
+  m_Name: ChoicesContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &560704749
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560704748}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.9094, y: 2.9094, z: 2.9094}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 875253763}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.0007915497, y: 406}
+  m_SizeDelta: {x: 953.53, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &560704750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560704748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bcbbeef83aaefa4d93aa919ccf7603b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panel: {fileID: 875253760}
+  tmpLineText: {fileID: 1057359988}
+  lineText: {fileID: 0}
+  choicesContainer: {fileID: 560704749}
+  choiceButtonPrefab: {fileID: 6115821176095638757, guid: 139bbbe4f03912c4bb9e284f62fac541, type: 3}
+  choiceButtonPrefabs:
+  - {fileID: 6115821176095638757, guid: 139bbbe4f03912c4bb9e284f62fac541, type: 3}
+  - {fileID: 5156637381793572100, guid: e6bd218a20abc464ea6ae1293ad58ba8, type: 3}
+--- !u!114 &560704751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 560704748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbfd0c2643e047d43840828d4ff2dcfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delaySeconds: 3
+  introLines:
+  - "Her zaman \xF6nce ben... Ba\u015Fkalar\u0131n\u0131n sorunlar\u0131 neden benim
+    y\xFCk\xFCm olsun ki?"
+  - "Onu o an g\xF6rmezden gelmek zorunda de\u011Fildim, ama... "
+  - "o mektup sadece benden bir \u015Feyler alacak gibi hissettirmi\u015Fti. Ne kadar
+    bencilce."
+  - "o mektup sadece benden bir \u015Feyler alacak gibi hissettirmi\u015Fti. Ne kadar
+    bencilce."
+  - "\u0130\u015Fte bu y\xFCzden yapayaln\u0131z\u0131m \u015Fimdi."
+  - "Ka\xE7amazs\u0131n! O mektubu \xE7\xF6pe att\u0131\u011F\u0131n an, yaln\u0131zl\u0131\u011F\u0131n\u0131
+    yazd\u0131n. O anki bencilli\u011Fin, seni kimsesiz b\u0131rakt\u0131!"
+  - "Ka\xE7amazs\u0131n! O mektubu \xE7\xF6pe att\u0131\u011F\u0131n an, yaln\u0131zl\u0131\u011F\u0131n\u0131
+    yazd\u0131n. O anki bencilli\u011Fin, seni kimsesiz b\u0131rakt\u0131!"
+  - "\u015Eimdi... o mektubu bulmal\u0131y\u0131m. Belki o zaman i\xE7imdeki bu a\u011F\u0131rl\u0131k
+    kaybolur."
+  onlyOnce: 1
 --- !u!1 &562653222
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,7 +564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &562653223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,10 +580,12 @@ MonoBehaviour:
   displayName: Interactable
   ghostId: 1
   dialogueLines:
-  - "\xD6rnek diyalog"
+  - "Tart\u0131\u015Fma kontrolden \xE7\u0131kt\u0131. Ne yapmal\u0131s\u0131n?"
   dialogueChoices:
-  - "do\u011Fru se\xE7im"
-  - "yanl\u0131\u015F se\xE7im"
+  - "Derin bir nefes al. S\xF6zlerinle birini incitmeden \xF6nce, neden bu kadar
+    \xF6fkelendi\u011Fini anlamaya \xE7al\u0131\u015F."
+  - "Sesini y\xFCkselt ve sald\u0131r\u0131ya ge\xE7! Hakl\u0131 oldu\u011Funu kan\u0131tlamak
+    zorundas\u0131n."
   correctChoiceIndex: 0
 --- !u!212 &562653224
 SpriteRenderer:
@@ -559,8 +648,8 @@ Transform:
   m_GameObject: {fileID: 562653222}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.96, y: -1.57, z: 0}
-  m_LocalScale: {x: 0.68458164, y: 0.68458164, z: 0.68458164}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -678,6 +767,83 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &875253760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 875253763}
+  - component: {fileID: 875253762}
+  - component: {fileID: 875253761}
+  m_Layer: 5
+  m_Name: Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &875253761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875253760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &875253762
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875253760}
+  m_CullTransparentMesh: 1
+--- !u!224 &875253763
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875253760}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 560704749}
+  - {fileID: 1057359987}
+  m_Father: {fileID: 2002379629}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.15300001, y: 0.07142593}
+  m_AnchorMax: {x: 0.8754479, y: 0.23742591}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &951726589
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,7 +1008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1034002661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,10 +1024,13 @@ MonoBehaviour:
   displayName: Interactable
   ghostId: 4
   dialogueLines:
-  - "\xD6rnek diyalog"
+  - "B\xFCy\xFCk bir anksiyete ata\u011F\u0131 ya\u015F\u0131yorsun. \u0130nsanlar
+    senden ne bekleyecek?"
   dialogueChoices:
-  - "do\u011Fru se\xE7im"
-  - "yanl\u0131\u015F se\xE7im"
+  - "Bu sadece bir duygu. Nefes al\u0131p an\u0131 kabul etmeliyim. M\xFCkemmel olmak
+    zorunda de\u011Filim."
+  - "Bu hisle ba\u015Fa \xE7\u0131kamam. Kontrol\xFC kaybetmemek i\xE7in her \u015Feyi
+    b\u0131rak\u0131p ka\xE7mal\u0131y\u0131m."
   correctChoiceIndex: 0
 --- !u!212 &1034002662
 SpriteRenderer:
@@ -924,8 +1093,8 @@ Transform:
   m_GameObject: {fileID: 1034002660}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.08696861, w: 0.9962111}
-  m_LocalPosition: {x: 5.69, y: -0.48, z: 0}
-  m_LocalScale: {x: 0.6249047, y: 0.6249047, z: 0.6249047}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -975,6 +1144,140 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &1057359986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1057359987}
+  - component: {fileID: 1057359989}
+  - component: {fileID: 1057359988}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1057359987
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057359986}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 875253763}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -325, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1057359988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057359986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: New Text
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 90
+  m_fontSizeBase: 90
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -950.76013, y: -141.67422, z: -1625.5026, w: -161.98686}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1057359989
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057359986}
+  m_CullTransparentMesh: 1
 --- !u!1 &1142230438
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,7 +1296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1142230439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1009,11 +1312,13 @@ MonoBehaviour:
   displayName: Interactable
   ghostId: 5
   dialogueLines:
-  - "\xD6rnek diyalog"
+  - "B\xFCy\xFCk bir proje teklifi geldi. Riskli ama heyecan verici. Ne yapmal\u0131s\u0131n?"
   dialogueChoices:
-  - "do\u011Fru se\xE7im"
-  - "yanl\u0131\u015F se\xE7im"
-  correctChoiceIndex: 0
+  - "Yeterince iyi de\u011Filim. Kabul edip ba\u015Far\u0131s\u0131z olmaktansa hi\xE7
+    ba\u015Flamayay\u0131m"
+  - "Ba\u015Far\u0131s\u0131zl\u0131k bir se\xE7enek olsa da, bu f\u0131rsat\u0131
+    denemeliyim. Korkuma ra\u011Fmen ad\u0131m ataca\u011F\u0131m."
+  correctChoiceIndex: 1
 --- !u!212 &1142230440
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1075,8 +1380,8 @@ Transform:
   m_GameObject: {fileID: 1142230438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.46, y: 1.2, z: 0}
-  m_LocalScale: {x: 0.7137549, y: 0.7137549, z: 0.7137549}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1266,8 +1571,8 @@ Transform:
   m_GameObject: {fileID: 1191649838}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.29, y: -0.16, z: 0}
-  m_LocalScale: {x: 0.39253953, y: 0.39253953, z: 0.39253953}
+  m_LocalPosition: {x: -4.88, y: -1.06, z: 0}
+  m_LocalScale: {x: 0.33425134, y: 0.33425134, z: 0.33425134}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1602,6 +1907,108 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2002379625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2002379629}
+  - component: {fileID: 2002379628}
+  - component: {fileID: 2002379627}
+  - component: {fileID: 2002379626}
+  m_Layer: 5
+  m_Name: Canvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2002379626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002379625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &2002379627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002379625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &2002379628
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002379625}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &2002379629
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2002379625}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 875253763}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
 --- !u!1 &2021259098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,3 +2218,4 @@ SceneRoots:
   - {fileID: 2080893136}
   - {fileID: 632107609}
   - {fileID: 1880593928}
+  - {fileID: 2002379629}

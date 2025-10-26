@@ -16,8 +16,17 @@ public class ItemPickup : Interactable
 
         if (!string.IsNullOrEmpty(blockedByGhostId) && !LevelManager.Instance.IsGhostCleared(blockedByGhostId))
         {
-            Debug.Log(displayName + " is blocked by a ghost. You need to deal with it first.");
-            // Ideally trigger a UI hint or play a sound
+            var hint = displayName + " is blocked by a ghost. You need to deal with it first.";
+            // Show hint in dialog UI if present, otherwise log
+            var ds = DialogueSystem.Instance;
+            if (ds != null) ds.ShowHint(hint, 2.0f);
+            else Debug.Log(hint);
+
+            // Reveal only the ghost that blocks this item so the player sees which ghost to deal with
+            if (LevelManager.Instance != null)
+            {
+                LevelManager.Instance.ShowGhostById(blockedByGhostId);
+            }
             return;
         }
 

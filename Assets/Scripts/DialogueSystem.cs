@@ -29,6 +29,14 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
+        // If a CustomDialogueController exists, prefer it
+        var custom = CustomDialogueController.Instance;
+        if (custom != null)
+        {
+            custom.ShowDialogue(lines, choices, onChoice);
+            return;
+        }
+
         // Fallback to console-driven auto dialogue when no UI present
         StartCoroutine(RunDialogue(lines, choices, onChoice));
     }
@@ -57,5 +65,27 @@ public class DialogueSystem : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
             onChoice?.Invoke(-1);
         }
+    }
+
+    /// <summary>
+    /// Show a short transient hint via available UI (CustomDialogueController or DialogueUI) or log as fallback.
+    /// </summary>
+    public void ShowHint(string message, float duration = 4f)
+    {
+        var custom = CustomDialogueController.Instance;
+        if (custom != null)
+        {
+            custom.ShowHint(message, duration);
+            return;
+        }
+
+        var ui = DialogueUI.Instance;
+        if (ui != null)
+        {
+            ui.ShowHint(message, duration);
+            return;
+        }
+
+        Debug.Log(message);
     }
 }
