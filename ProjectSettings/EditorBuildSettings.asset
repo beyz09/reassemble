@@ -8,27 +8,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Scenes/gecis.unity
-    guid: eff0bf6b755a037448e3c39e795b51d4
+  - enabled: 1
+    path: Assets/Scenes/giris.unity
+    guid: b3c17fde18022c7468f4a1ca97e9cf26
   - enabled: 1
     path: Assets/Scenes/Tetris.unity
     guid: a2e699076b6ed1146816df18d85c3c78
-  - enabled: 0
-    path: Assets/Scenes/gecis 1.unity
-    guid: 1a64d30f0009d40418059877fc3eb85f
   - enabled: 1
-    path: Assets/Scenes/EscapeRoom.unity
-    guid: 939a45f788f39284aab46729d396b891
-  - enabled: 0
-    path: Assets/Scenes/gecis 2.unity
-    guid: 648da8059530d654cbcf69f78796725a
+    path: Assets/Scenes/EscapeRoom 1.unity
+    guid: 29d36f83372c95b4e964b51d14e4c2a4
   - enabled: 1
-    path: Assets/Scenes/kedi.unity
-    guid: 2c9b64e96f7b8ab48adb2ac89935f5dc
-  - enabled: 0
-    path: Assets/Scenes/gecis 3.unity
-    guid: 2be737bf03c967e43a25ca06ad2a5c5c
+    path: Assets/Scenes/cat_wash.unity
+    guid: 3b76e53b17e956d49a77da99f32c019d
   - enabled: 1
     path: Assets/Scenes/Anxiety.unity
     guid: f4195c6aef4e5984096a808b9034f955

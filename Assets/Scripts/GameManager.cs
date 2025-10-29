@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro; 
 using UnityEngine.SceneManagement; 
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,8 +17,20 @@ public class GameManager : MonoBehaviour
     public GameObject OyunBittiPaneli; 
     public TextMeshProUGUI SonucYazisiText; 
 
+    [Header("Dialogue UI")]
+    public GameObject dialoguePanel;
+    public TextMeshProUGUI dialogueText;
+    public Button dialogueNextButton;
+
+    [Header("Dialogues")]
+    public string[] introDialogueLines;
+    public string[] outroDialogueLines;
+
     // YENİ EKLENEN: Müzik Yöneticisi Referansı
     private MuzikYoneticisi muzikYoneticisi; 
+    private int currentDialogueLine;
+    private string[] activeDialogue;
+    private System.Action onDialogueEnd;
 
     void Start()
     {
@@ -39,6 +52,44 @@ public class GameManager : MonoBehaviour
         {
             farkSayaciText.text = "0 / " + hedefFarkSayisi;
         }
+
+        dialogueNextButton.onClick.AddListener(OnDialogueNext);
+
+        if (introDialogueLines != null && introDialogueLines.Length > 0)
+        {
+            StartDialogue(introDialogueLines, () => { Time.timeScale = 1f; });
+            Time.timeScale = 0f; // Diyalog sırasında oyun dursun
+        }
+    }
+
+    private void OnDialogueNext()
+    {
+        currentDialogueLine++;
+        if (activeDialogue != null && currentDialogueLine < activeDialogue.Length)
+        {
+            dialogueText.text = activeDialogue[currentDialogueLine];
+        }
+        else
+        {
+            dialoguePanel.SetActive(false);
+            activeDialogue = null;
+            onDialogueEnd?.Invoke(); // Diyalog bitince ne olacağını çalıştır
+        }
+    }
+
+    private void StartDialogue(string[] lines, System.Action onEndAction)
+    {
+        if (lines == null || lines.Length == 0)
+        {
+            onEndAction?.Invoke();
+            return;
+        }
+
+        dialoguePanel.SetActive(true);
+        activeDialogue = lines;
+        currentDialogueLine = 0;
+        dialogueText.text = activeDialogue[currentDialogueLine];
+        onDialogueEnd = onEndAction;
     }
 
     // Fark objeleri bu metodu çağıracak
@@ -79,27 +130,31 @@ public class GameManager : MonoBehaviour
 
     private void OyunKazanildi()
     {
-        OyunuDurdur();
+        oyunBitti = true;
         Debug.Log("Tebrikler! Tüm farkları buldunuz! (KAZANDINIZ)");
-        
-        // KAZANMA MESAJINI AYARLA
-        if (SonucYazisiText != null)
-        {
-            SonucYazisiText.text = "TEBRİKLER!\nTüm Farkları Buldunuz!";
-        }
+
+        StartDialogue(outroDialogueLines, () => {
+            OyunuDurdur();
+            if (SonucYazisiText != null)
+            {
+                SonucYazisiText.text = "TEBRİKLER!\nTüm Farkları Buldunuz!";
+            }
+        });
     }
 
     // GeriSayimSayaci bu metodu çağırır.
     public void OyunKaybedildi()
     {
-        OyunuDurdur();
+        oyunBitti = true;
         Debug.Log("Süre Bitti! (KAYBETTİNİZ)");
 
-        // KAYBETME MESAJINI AYARLA
-        if (SonucYazisiText != null)
-        {
-            SonucYazisiText.text = "SÜRE BİTTİ!\nTekrar Dene.";
-        }
+        StartDialogue(outroDialogueLines, () => {
+            OyunuDurdur();
+            if (SonucYazisiText != null)
+            {
+                SonucYazisiText.text = "SÜRE BİTTİ!\nTekrar Dene.";
+            }
+        });
     }
 
     // YENİDEN BAŞLAT BUTONUNA BAĞLANACAK METOT (Aynı sahneyi yeniden yükler)
