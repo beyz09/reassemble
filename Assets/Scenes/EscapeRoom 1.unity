@@ -159,6 +159,21 @@ MonoBehaviour:
   anxietyDecreasePerClick: 10
   maxAnxiety: 100
   bubbleSpawnRate: 1
+  introDialogueLines:
+  - "Ugh... yine bu oda. Neden buraya geri d\xF6n\xFCp duruyorum?"
+  - "Her \u015Fey ne kadar da tan\u0131d\u0131k... ve bir o kadar da bo\u011Fucu."
+  - "Bu e\u015Fyalar... Onlar sadece e\u015Fya de\u011Fil. Onlar benim pi\u015Fmanl\u0131klar\u0131m.
+    Korkakl\u0131klar\u0131m, \xF6fkem, bencilli\u011Fim... Hepsini bu odaya kilitlemi\u015Fim."
+  - "San\u0131r\u0131m... ilerleyebilmek i\xE7in \xF6nce y\xFCzle\u015Fmem gerekiyor.
+    Bu 4 hayaletle. Bu 4 par\xE7amla."
+  outroDialogueLines:
+  - "Hepsi... bitti. Hepsini toplad\u0131m."
+  - "O anksiyete, o \xF6fke, o korku... hala oradalar. Ama... art\u0131k beni kontrol
+    etmiyorlar. Onlar sadece benim bir par\xE7am."
+  - "Ge\xE7mi\u015Fi de\u011Fi\u015Ftiremem. O anlarda verdi\u011Fim kararlar\u0131
+    geri alamam. Ama... onlardan ka\xE7may\u0131 b\u0131rakabilirim."
+  - "Bu oda art\u0131k bir hapishane de\u011Fil. Sadece... bir hat\u0131ra. San\u0131r\u0131m
+    art\u0131k... kap\u0131y\u0131 a\xE7abilirim."
 --- !u!4 &90751302
 Transform:
   m_ObjectHideFlags: 0
@@ -390,7 +405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1287.9999, y: -280.55}
+  m_AnchoredPosition: {x: 910.21, y: -280.55}
   m_SizeDelta: {x: 850, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &231401666
@@ -406,14 +421,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.078431375}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 22f10eca66ee42142b12508e8d4504a7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cf5be96e2c743854fafd2691e3c4f9fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -581,7 +596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &279775931
 RectTransform:
   m_ObjectHideFlags: 0
@@ -602,9 +617,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -216.1}
-  m_SizeDelta: {x: -184.8867, y: -748.9011}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -1169.5786, y: -748.9}
+  m_Pivot: {x: 0.49999997, y: 0.5}
 --- !u!114 &279775932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,11 +855,15 @@ MonoBehaviour:
   sameChoiceButton: {fileID: 265397883}
   differentChoiceButton: {fileID: 1577611810}
   inventorySlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  collectedItemSprites: []
+  - {fileID: 1257994191}
+  - {fileID: 703657843}
+  - {fileID: 1619148013}
+  - {fileID: 231401666}
+  collectedItemSprites:
+  - {fileID: 21300000, guid: a11702a7b340e9649a8873cc0bd5d47c, type: 3}
+  - {fileID: 21300000, guid: 49c3cfab8d0e3144eacc997a064fcf96, type: 3}
+  - {fileID: 21300000, guid: bc3d6787aa45a704baa7832b1316c62d, type: 3}
+  - {fileID: 21300000, guid: 22f10eca66ee42142b12508e8d4504a7, type: 3}
 --- !u!4 &363714555
 Transform:
   m_ObjectHideFlags: 0
@@ -1247,7 +1266,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Ayn\u0131 Karar"
+  m_text: "Ayn\u0131 hata..."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89f73aeaa56cf464d961ee3d5d9039a5, type: 2}
   m_sharedMaterial: {fileID: -7273661106450821262, guid: 89f73aeaa56cf464d961ee3d5d9039a5, type: 2}
@@ -1358,7 +1377,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -412, y: -280.55}
+  m_AnchoredPosition: {x: -347, y: -280.55}
   m_SizeDelta: {x: 850, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &703657843
@@ -1374,14 +1393,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.078431375}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 49c3cfab8d0e3144eacc997a064fcf96, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f253bb0d022963d429838c6025be85e6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1793,7 +1812,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1262, y: 280.55}
+  m_AnchoredPosition: {x: -780, y: 338}
   m_SizeDelta: {x: 850, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257994191
@@ -1809,14 +1828,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.078431375}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a11702a7b340e9649a8873cc0bd5d47c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 068d889569210d54787e72950f737838, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1975,7 +1994,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Farkl\u0131 Karar"
+  m_text: "Farkl\u0131 bir son..."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89f73aeaa56cf464d961ee3d5d9039a5, type: 2}
   m_sharedMaterial: {fileID: -7273661106450821262, guid: 89f73aeaa56cf464d961ee3d5d9039a5, type: 2}
@@ -2539,7 +2558,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 437.99988, y: 280.54993}
+  m_AnchoredPosition: {x: 230, y: 280.55}
   m_SizeDelta: {x: 850, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1619148013
@@ -2555,14 +2574,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.078431375}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc3d6787aa45a704baa7832b1316c62d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2205dd66c5fbd824f989ed2aa31ccc65, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

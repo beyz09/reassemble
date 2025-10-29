@@ -16,14 +16,19 @@ public class RoomManager : MonoBehaviour
     public float maxAnxiety = 100f;
     public float bubbleSpawnRate = 0.5f; // Saniyede kaç baloncuk spawn olacağı
 
+    [Header("Game Dialogues")]
+    public string[] introDialogueLines;
+    public string[] outroDialogueLines;
+
     private float currentAnxiety;
     private ClickableObject currentObject; // Şu an etkileşimde olunan nesne
     private int currentDialogueLine;
+    private string[] activeDialogue; // Mevcut aktif diyalog (nesne veya sistem)
     private static ClickableObject staticCurrentObject;
     private bool[] collectedItems = new bool[4];
 
     // Oyunun durumunu takip etmek için
-    private enum GameState { Browsing, InDialogue, AnxietyMinigame, InChoice }
+    private enum GameState { Browsing, InDialogue, AnxietyMinigame, InChoice, GameOver }
     private GameState currentState;
 
     void Awake()
@@ -46,10 +51,17 @@ public class RoomManager : MonoBehaviour
         uiManager.dialogueNextButton.onClick.AddListener(OnDialogueNext);
         //uiManager.sameChoiceButton.onClick.AddListener(() => OnChoiceMade(true));
         //uiManager.differentChoiceButton.onClick.AddListener(() => OnChoiceMade(false));
+
+        // --- YENİ: OYUN BAŞLANGIÇ DİYALOĞU ---
+        if (introDialogueLines != null && introDialogueLines.Length > 0)
+        {
+            StartSystemDialogue(introDialogueLines);
+        }
     }
 
     public bool CanInteract()
     {
+        // Diyalog sırasında da etkileşimi engelle
         return currentState == GameState.Browsing;
     }
 
@@ -62,23 +74,38 @@ public class RoomManager : MonoBehaviour
 
         currentState = GameState.InDialogue;
         currentDialogueLine = 0;
+        activeDialogue = currentObject.dialogueLines; // Aktif diyaloğu ayarla
         
         uiManager.ShowDialogue(true);
-        uiManager.SetDialogueText(currentObject.dialogueLines[currentDialogueLine]);
+        uiManager.SetDialogueText(activeDialogue[currentDialogueLine]);
     }
 
     // 2. ADIM: Diyalog "İleri" butonuna basıldı
     private void OnDialogueNext()
     {
+        // Eğer oynatılacak bir diyalog yoksa veya oyun bittiyse bir şey yapma
+        if (activeDialogue == null || currentState == GameState.GameOver) return;
+
         currentDialogueLine++;
-        if (currentDialogueLine < currentObject.dialogueLines.Length)
+        if (currentDialogueLine < activeDialogue.Length)
         {
-            uiManager.SetDialogueText(currentObject.dialogueLines[currentDialogueLine]);
+            uiManager.SetDialogueText(activeDialogue[currentDialogueLine]);
         }
         else
         {
-            // Diyalog bitti, mini-oyuna geç
-            StartAnxietyMinigame();
+            // Mevcut diyalog bittiğinde ne olacağını belirle
+            if (currentObject != null)
+            {
+                // Bu bir nesne diyaloğuydu, mini oyuna geç
+                StartAnxietyMinigame();
+            }
+            else
+            {
+                // Bu bir sistem (giriş/çıkış) diyaloğuydu, normale dön
+                uiManager.ShowDialogue(false);
+                currentState = GameState.Browsing;
+                activeDialogue = null; // Aktif diyaloğu temizle
+            }
         }
     }
 
@@ -253,7 +280,24 @@ public class RoomManager : MonoBehaviour
         if (allCollected)
         {
             Debug.Log("TEBRİKLER! TÜM NESNELER TOPLANDI!");
-            // (Burada level bitişini tetikleyebilirsiniz)
+            // --- YENİ: OYUN SONU DİYALOĞU ---
+            if (outroDialogueLines != null && outroDialogueLines.Length > 0)
+            {
+                StartSystemDialogue(outroDialogueLines);
+                currentState = GameState.GameOver; // Oyun bitti olarak işaretle
+            }
         }
+    }
+
+    // --- YENİ FONKSİYON: NESNEYE BAĞLI OLMAYAN DİYALOGLARI BAŞLATMAK İÇİN ---
+    private void StartSystemDialogue(string[] lines)
+    {
+        currentState = GameState.InDialogue;
+        currentObject = null; // Bu bir sistem diyaloğu, nesne yok
+        activeDialogue = lines;
+        currentDialogueLine = 0;
+
+        uiManager.ShowDialogue(true);
+        uiManager.SetDialogueText(activeDialogue[currentDialogueLine]);
     }
 }
