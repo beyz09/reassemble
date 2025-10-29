@@ -1735,7 +1735,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Sonraki B\xF6l\xFCm\n"
+  m_text: next
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ebae600f347c2c6469e46025aa86d0ee, type: 2}
   m_sharedMaterial: {fileID: 7299267180688218421, guid: ebae600f347c2c6469e46025aa86d0ee, type: 2}
@@ -1744,8 +1744,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293783027
-  m_fontColor: {r: 0.9547169, g: 0.92769665, b: 0.92769665, a: 1}
+    rgba: 4278206719
+  m_fontColor: {r: 1, g: 0.24999999, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

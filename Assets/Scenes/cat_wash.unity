@@ -2686,7 +2686,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Sonraki B\xF6l\xFCm"
+  m_text: next
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89f73aeaa56cf464d961ee3d5d9039a5, type: 2}
   m_sharedMaterial: {fileID: -7273661106450821262, guid: 89f73aeaa56cf464d961ee3d5d9039a5, type: 2}
