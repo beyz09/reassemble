@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Piece : MonoBehaviour
 {
+    private TetrisManager manager; 
     public Board board { get; private set; }
     public TetrominoData data { get; private set; }
     public Vector3Int[] cells { get; private set; }
@@ -27,17 +28,37 @@ public class Piece : MonoBehaviour
         moveTime = Time.time + moveDelay;
         lockTime = 0f;
 
-        if (cells == null) {
+        if (cells == null)
+        {
             cells = new Vector3Int[data.cells.Length];
         }
 
-        for (int i = 0; i < cells.Length; i++) {
+        for (int i = 0; i < cells.Length; i++)
+        {
             cells[i] = (Vector3Int)data.cells[i];
         }
+    }
+    private void Start()
+    {
+        // TetrisManager'ı bul ve referans al
+        manager = FindObjectOfType<TetrisManager>(); 
     }
 
     private void Update()
     {
+        // =================================================================
+        // OYUN DURDURMA KONTROLÜ (KRİTİK)
+        // Eğer Time.timeScale 0 ise (Oyun Durduysa), parça hareketini durdur.
+        if (manager != null && manager.isGameOver)
+        {
+            return;
+        }
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+        // =================================================================
+
         board.Clear(this);
 
         // We use a timer to allow the player to make adjustments to the piece
@@ -45,32 +66,37 @@ public class Piece : MonoBehaviour
         lockTime += Time.deltaTime;
 
         // Handle rotation
-        if (Input.GetKeyDown(KeyCode.Q)) {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
             Rotate(-1);
-        } else if (Input.GetKeyDown(KeyCode.E)) {
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
             Rotate(1);
         }
 
         // Handle hard drop
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             HardDrop();
         }
 
         // Allow the player to hold movement keys but only after a move delay
         // so it does not move too fast
-        if (Time.time > moveTime) {
+        if (Time.time > moveTime)
+        {
             HandleMoveInputs();
         }
 
         // Advance the piece to the next row every x seconds
-        if (Time.time > stepTime) {
+        if (Time.time > stepTime)
+        {
             Step();
         }
 
         board.Set(this);
-    }
-
-    private void HandleMoveInputs()
+    }  
+  private void HandleMoveInputs()
     {
         // Soft drop movement
         if (Input.GetKey(KeyCode.S))

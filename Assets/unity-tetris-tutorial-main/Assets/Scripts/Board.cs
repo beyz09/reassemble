@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 [DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
 {
+    private TetrisManager manager;
     public Tilemap tilemap { get; private set; }
     public Piece activePiece { get; private set; }
 
@@ -32,13 +33,29 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
+        manager = FindObjectOfType<TetrisManager>();
+        if (manager == null)
+        {
+            Debug.LogError("HATA: TetrisManager sahnede bulunamad! Lütfen bir GameObject'e ekleyin.");
+        }
         SpawnPiece();
     }
 
     public void SpawnPiece()
     {
-        int random = Random.Range(0, tetrominoes.Length);
-        TetrominoData data = tetrominoes[random];
+        // Board.cs - SpawnPiece() fonksiyonu içinde
+
+if (tetrominoes.Length == 0)
+{
+    Debug.LogError("HATA: Tetrominoes dizisi boş! Parçaları Editor'de atayın.");
+    return; // Parça yoksa fonksiyondan hemen çık
+}
+
+// Güvenli rastgele seçim
+int random = Random.Range(0, tetrominoes.Length);
+
+// Hata veren satır artık güvenli olmalı
+TetrominoData data = tetrominoes[random];
 
         activePiece.Initialize(this, spawnPosition, data);
 
@@ -97,23 +114,43 @@ public class Board : MonoBehaviour
         return true;
     }
 
-    public void ClearLines()
-    {
-        RectInt bounds = Bounds;
-        int row = bounds.yMin;
+    // Board.cs (veya Grid.cs) scriptinizdeki ClearLines fonksiyonunun YENİ HALİ
 
-        // Clear from bottom to top
-        while (row < bounds.yMax)
-        {
-            // Only advance to the next row if the current is not cleared
-            // because the tiles above will fall down when a row is cleared
-            if (IsLineFull(row)) {
-                LineClear(row);
-            } else {
-                row++;
-            }
+public void ClearLines()
+{
+    RectInt bounds = Bounds;
+    int row = bounds.yMin;
+    
+    // TEMİZLENEN HAT SAYACINI BURADA BAŞLATIYORUZ
+    int linesCleared = 0; 
+
+    // Clear from bottom to top
+    while (row < bounds.yMax)
+    {
+        // Bir hat dolu mu kontrol et
+        if (IsLineFull(row)) {
+            // Eğer doluysa, hattı temizle ve...
+            LineClear(row);
+            
+            // ... sayacı artır!
+            linesCleared++; 
+        } else {
+            // Dolu değilse, bir sonraki satıra geç
+            row++;
         }
     }
+
+    // ------------------------------------------------------------------
+    // SKOR GÜNCELLEME: Tüm döngü bittikten sonra, eğer hat temizlendiyse
+    // ------------------------------------------------------------------
+    if (linesCleared > 0 && manager != null) 
+    {
+        // Toplam temizlenen hat sayısını TetrisManager'daki AddScore metoduna gönder
+        manager.AddScore(linesCleared); 
+    }
+}
+
+// LineClear(int row) fonksiyonu değişmeden kalabilir.
 
     public bool IsLineFull(int row)
     {
