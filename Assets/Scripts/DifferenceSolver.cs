@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro; // TextMeshPro kullanımı için gerekli
-using System.Collections.Generic;
+using UnityEngine.SceneManagement; 
+using TMPro; 
+using System.Collections.Generic; // List<int> için gerekli
+ // List<int> için gerekli
 
 public class DifferenceSolver : MonoBehaviour
 {
     // =========================================================
-    //                DEĞİŞKEN TANIMLARI
+    //                REFERANS VE DEĞİŞKENLER
     // =========================================================
     
     [Header("Sıralama UI'ı")]
@@ -16,15 +17,16 @@ public class DifferenceSolver : MonoBehaviour
     public TextMeshProUGUI[] SlotMetinleri = new TextMeshProUGUI[7];
 
     [Header("Görsel Ayarları")]
-    public Sprite[] FarkGorselleri = new Sprite[7]; // Görsel Kaynağı
-    public Sprite BosSlotGorseli; // (Opsiyonel) Boş slotlar için şeffaf bir görsel
+    // Not: Bu diziye sadece Sprite tipinde PNG'ler atanmalıdır.
+    public Sprite[] FarkGorselleri = new Sprite[7]; 
+    public Sprite BosSlotGorseli; // Opsiyonel
 
     [Header("Bulmaca Ayarları")]
     private List<int> bulunanFarkIndeksleri = new List<int>(); 
     public int[] DogruSiralamaCevabi = new int[7]; 
 
     [Header("Oyun Sonu Ayarları")]
-    public string SonrakiSahneAdi = "SonrakiBolum";
+    public string SonrakiSahneAdi = "bitis"; // Sizin verdiğiniz sahne adı
     public GameObject BasarisizMesajPaneli;
 
     // =========================================================
@@ -40,12 +42,12 @@ public class DifferenceSolver : MonoBehaviour
             BasarisizMesajPaneli.SetActive(false);
         }
         
-        // Slotları temiz ve şeffaf hale getir (Hazırlık)
+        // Slotları temiz ve görünmez hale getir
         TemizleSlotlari(true); 
     }
 
     /// <summary>
-    /// Slotların başlangıç ayarını yapar ve sıfırlar.
+    /// Slotların görünürlüğünü kaldırır ve listeyi sıfırlar.
     /// </summary>
     private void TemizleSlotlari(bool baslangic)
     {
@@ -53,14 +55,14 @@ public class DifferenceSolver : MonoBehaviour
 
         for (int i = 0; i < 7; i++)
         {
-            if (PngSlots[i] != null)
+            if (PngSlots.Length > i && PngSlots[i] != null) // Hata kontrolü
             {
-                // Görseli kaldır
+                // Görseli kaldır ve tamamen şeffaf yap
                 PngSlots[i].sprite = BosSlotGorseli;
-                // Şeffaflık (Alpha) ayarı: Tamamen görünmez yap
-                PngSlots[i].color = new Color(1, 1, 1, 0); 
+                // Color.clear = (0, 0, 0, 0) tamamen şeffaf yapar.
+                PngSlots[i].color = Color.clear; 
             }
-            if (SlotMetinleri[i] != null)
+            if (SlotMetinleri.Length > i && SlotMetinleri[i] != null) // Hata kontrolü
             {
                 // Metinleri temizle
                 SlotMetinleri[i].text = "";
@@ -73,46 +75,55 @@ public class DifferenceSolver : MonoBehaviour
 
 
     // =========================================================
-    //                FARK BULUNDUĞU AN
+    //                FARK BULUNDUĞU AN (TETİKLEYİCİ)
     // =========================================================
     
+    /// <summary>
+    /// Fark bulunduğunda çağrılacak ana metot.
+    /// </summary>
+    /// <param name="farkIndex">Bulunan farkın FarkGorselleri dizisindeki indeksi (0-6).</param>
     public void FarkBulundu(int farkIndex)
     {
-        // Debug kontrolü: Kodun çağrıldığından emin ol
-        Debug.Log($"Fark bulundu: İndeks {farkIndex}. Slot {bulunanFarkIndeksleri.Count}'a ekleniyor.");
+        // Debug.Log($"Fark bulundu: İndeks {farkIndex}. Slot {bulunanFarkIndeksleri.Count}'a ekleniyor."); // Eski Debug
 
-        // Eğer tüm slotlar dolmadıysa, görseli ekle
-        if (bulunanFarkIndeksleri.Count < 7)
+        if (bulunanFarkIndeksleri.Count >= 7) return; // Zaten doluysa bir şey yapma
+        
+        int slotIndex = bulunanFarkIndeksleri.Count; // Hangi boş slota ekleyeceğimizi bul
+        
+        // 1. Paneli aç (Eğer kapalıysa)
+        if (SiralamaPaneli != null && !SiralamaPaneli.activeSelf) {
+            SiralamaPaneli.SetActive(true);
+        }
+        
+        // GÖRSELİ EKLEME VE GÖRÜNÜR YAPMA
+        // Koşul kontrolü: Slot var mı VE kaynak görsel var mı?
+        if (PngSlots[slotIndex] != null && FarkGorselleri.Length > farkIndex && FarkGorselleri[farkIndex] != null)
         {
-            // 1. Paneli aç (Eğer kapalıysa)
-            if (SiralamaPaneli != null && !SiralamaPaneli.activeSelf) {
-                SiralamaPaneli.SetActive(true);
-            }
+            PngSlots[slotIndex].sprite = FarkGorselleri[farkIndex];
             
-            int slotIndex = bulunanFarkIndeksleri.Count; // 0'dan 6'ya giden boş slot indeksi
-            
-            // GÖRSELİ EKLE
-            if (PngSlots[slotIndex] != null && FarkGorselleri.Length > farkIndex && FarkGorselleri[farkIndex] != null)
-            {
-                PngSlots[slotIndex].sprite = FarkGorselleri[farkIndex];
-                // Görünür yapma (Alpha 1)
-                PngSlots[slotIndex].color = new Color(1, 1, 1, 1); 
-            }
-            
-            // METİNİ EKLE (Sıra Numarası)
-            if (SlotMetinleri.Length > slotIndex && SlotMetinleri[slotIndex] != null)
-            {
-                int suankiSira = slotIndex + 1; 
-                SlotMetinleri[slotIndex].text = suankiSira.ToString();
-            }
-            
-            bulunanFarkIndeksleri.Add(farkIndex); // Bulunan farkın indeksini listeye ekle
+            // Görünür yapma (Color.white = R:1, G:1, B:1, A:1)
+            PngSlots[slotIndex].color = Color.white; 
+        }
+        else
+        {
+             // Hata tespiti için eklenen kritik debug mesajı:
+             Debug.LogError($"ATAMA BAŞARISIZ! Slot: {PngSlots[slotIndex] == null}. Görsel: {FarkGorselleri[farkIndex] == null}. Lütfen atamaları kontrol edin!");
+             return;
+        }
+        
+        // METİNİ EKLE (Sıra Numarası)
+        if (SlotMetinleri.Length > slotIndex && SlotMetinleri[slotIndex] != null)
+        {
+            int suankiSira = slotIndex + 1; 
+            SlotMetinleri[slotIndex].text = suankiSira.ToString();
+        }
+        
+        bulunanFarkIndeksleri.Add(farkIndex); // İndeksi listeye ekle
 
-            // Eğer 7 fark da bulunduysa, kontrolü yap
-            if (bulunanFarkIndeksleri.Count == 7)
-            {
-                KontrolEtVeBolumuGec();
-            }
+        // Eğer 7 fark da bulunduysa, kontrolü yap
+        if (bulunanFarkIndeksleri.Count == 7)
+        {
+            KontrolEtVeBolumuGec();
         }
     }
 
@@ -144,8 +155,6 @@ public class DifferenceSolver : MonoBehaviour
             if (BasarisizMesajPaneli != null) {
                 BasarisizMesajPaneli.SetActive(true);
             }
-            // Otomatik temizlemek yerine, temizleme işlemini BasarisizMesajPaneli'ndeki 
-            // "Tekrar Dene" butonuna bağlamak daha iyi bir UX sağlar.
         }
     }
 
@@ -153,5 +162,18 @@ public class DifferenceSolver : MonoBehaviour
     public void TemizleVeTekrarDene()
     {
        TemizleSlotlari(false);
+    }
+    
+    // Opsiyonel Sahne Geçişi
+    public void SonrakiSahneyeGit()
+    {
+        if (!string.IsNullOrEmpty(SonrakiSahneAdi))
+        {
+            SceneManager.LoadScene(SonrakiSahneAdi);
+        }
+        else
+        {
+            Debug.LogError("Sonraki Sahne Adı belirlenmedi!");
+        }
     }
 }

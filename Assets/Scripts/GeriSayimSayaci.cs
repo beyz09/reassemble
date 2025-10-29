@@ -12,29 +12,33 @@ public class GeriSayimSayaci : MonoBehaviour
     private float kalanSure;
 
     // Inspector'dan bağlanacak TextMeshPro bileşeni
-    public TextMeshProUGUI sureGostergeText; 
+    public TextMeshProUGUI sureGostergeText;
     
-    // GameManager referansı (Süre bittiğinde GameManager'a haber vermek için)
-    public GameManager gameManager; 
+    // GameManager referansı (Oyunun bitişini yönetmek için)
+    private GameManager gameManager; // public yerine private yapıp Start'ta atamak daha güvenli
 
     void Start()
     {
         // Kalan süreyi başlangıç değerine ayarla
         kalanSure = baslangicSuresi;
         
-        // GameManager'ı otomatik bul (Eğer atanmamışsa)
-        if (gameManager == null)
-        {
-            gameManager = FindObjectOfType<GameManager>();
-        }
+        // GameManager'ı sahnede bul ve referansı al
+        gameManager = FindObjectOfType<GameManager>();
+
+        // Başlangıç süresini göster
+        sureGostergeText.text = FormatSure(kalanSure);
     }
 
     void Update()
     {
-        // Eğer kalan süre sıfırdan büyükse
+        // Time.timeScale 0 ise Update çalışır, ancak Time.deltaTime 0 olur.
+        // Ancak GameManager oyunu durdurduğunda bu döngünün de durmasını istiyoruz.
+        
+        // Süre sıfırdan büyük olduğu ve oyun durdurulmadığı sürece devam et
+        // Oyun durdurulduğunda (Time.timeScale=0) Time.deltaTime da 0 olacağı için bu zaten durur.
         if (kalanSure > 0)
         {
-            // Süreyi azalt (Time.deltaTime: son frameden bu yana geçen zaman)
+            // Süreyi azalt (Time.deltaTime, Time.timeScale 0 ise 0'dır)
             kalanSure -= Time.deltaTime;
 
             // Sürenin sıfırın altına düşmesini engelle
@@ -63,16 +67,10 @@ public class GeriSayimSayaci : MonoBehaviour
 
     void ZamanBitti()
     {
-        Debug.Log("Süre Bitti! Oyun Kaybedildi.");
-        
-        // Eğer GameManager varsa, Kaybetme/Süre Bitti fonksiyonunu çağır
+        // GameManager'a sürenin bittiğini ve oyunu kaybetme durumunun olduğunu bildir
         if (gameManager != null)
         {
-             // Örneğin GameManager'a bir Kaybettin fonksiyonu ekleyebilirsiniz
-             // gameManager.OyunKaybedildi(); 
+            gameManager.OyunKaybedildi();
         }
-        
-        // Zamanı durdur (Oyunu dondurmak için)
-        Time.timeScale = 0f; 
     }
 }
