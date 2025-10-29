@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro; 
-using UnityEngine.SceneManagement; // Sahneyi yeniden başlatmak için gerekli
+using UnityEngine.SceneManagement; 
 
 public class GameManager : MonoBehaviour
 {
@@ -13,13 +13,20 @@ public class GameManager : MonoBehaviour
 
     // UI BİLEŞENLERİ
     public TextMeshProUGUI farkSayaciText;
-    public GameObject OyunBittiPaneli;       // Bitiş ekranı paneli
-    public TextMeshProUGUI SonucYazisiText;  // Kazanma/Kaybetme metni
+    public GameObject OyunBittiPaneli; 
+    public TextMeshProUGUI SonucYazisiText; 
+
+    // YENİ EKLENEN: Müzik Yöneticisi Referansı
+    private MuzikYoneticisi muzikYoneticisi; 
 
     void Start()
     {
         // Oyun başladığında zamanı normal hıza (1f) ayarla
         Time.timeScale = 1f;
+        
+        // YENİ EKLENEN: Sahnede bulunan MuzikYoneticisi'ni bul
+        // MuzikYoneticisi DontDestroyOnLoad ile korunur, bu yüzden her zaman bulunur.
+        muzikYoneticisi = FindObjectOfType<MuzikYoneticisi>();
         
         // Başlangıçta paneli gizle
         if (OyunBittiPaneli != null)
@@ -95,7 +102,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // YENİDEN BAŞLAT BUTONUNA BAĞLANACAK METOT
+    // YENİDEN BAŞLAT BUTONUNA BAĞLANACAK METOT (Aynı sahneyi yeniden yükler)
     public void YenidenBaslat()
     {
         // 1. Oyun zamanını tekrar normale çevir
@@ -103,5 +110,20 @@ public class GameManager : MonoBehaviour
 
         // 2. Mevcut sahneyi yeniden yükle
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    
+    // YENİ EKLENEN: SONUÇ EKRANINA GEÇİŞ VE MÜZİK DEĞİŞTİRME METODU
+    // Bu metot, Son Sahneye geçiş butonuna (Eğer varsa) bağlanacaktır.
+    public void SonucEkraninaGec(string sahneAdi) 
+    {
+        // 1. Müzik Değişikliğini Yap (Önce Müziği Değiştiriyoruz)
+        if (muzikYoneticisi != null)
+        {
+            muzikYoneticisi.SonSahneyeGecisMuzik();
+        }
+        
+        // 2. Sahne Geçişini Yap (Sonra sahneye geçiyoruz)
+        Time.timeScale = 1f; // Zamanı normale çevirmezseniz sahne geçişi donabilir
+        SceneManager.LoadScene(sahneAdi); 
     }
 }
